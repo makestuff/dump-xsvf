@@ -30,7 +30,7 @@ LDFLAGS = -Wl,--relax -Wl,--gc-sections
 OBJDIR = .build
 DEPDIR = .deps
 
-all: ../../libs/libxsvf $(TARGET)
+all: ../../include ../../libs/libxsvf $(TARGET)
 
 ../../libs/libxsvf/lib/linux/libxsvf.a:
 	make -f Makefile.linux -C ../../libs/libxsvf

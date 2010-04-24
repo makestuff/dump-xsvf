@@ -15,8 +15,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-all: FORCE
+all: \
+		../../include \
+		../../libs/libxsvf
+	make -f Makefile.win32 -C ../../libs/libxsvf
 	vcbuild /nologo dumpXsvf.vcproj
+
+-include Makefile.common
 
 clean: FORCE
 	rm -rf Release Debug *.ncb *.sln *.suo *.user
