@@ -1,0 +1,21 @@
+Dumps XSVF files to stdout in a human-readable format for debugging.
+
+The project build assumes a directory structure like this:
+
+src
+|
++-apps
+| |
+| +-dumpXsvf
+|
++-libs
+|
++-3rd
+
+*** BUILDING ON WINDOWS ***
+
+make -f Makefile.win32
+
+*** BUILDING ON LINUX ***
+
+make -f Makefile.linux
