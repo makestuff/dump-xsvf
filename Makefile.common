@@ -15,13 +15,13 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ../../include:
-	wget http://github.com/makestuff/include/tarball/master
+	wget --no-check-certificate http://github.com/makestuff/include/tarball/master
 	tar xvzf makestuff-include-*.tar.gz
 	rm makestuff-include-*.tar.gz
 	mv makestuff-include* ../../include
 
 ../../libs/libxsvf:
-	wget http://github.com/makestuff/libxsvf/tarball/master
+	wget --no-check-certificate http://github.com/makestuff/libxsvf/tarball/master
 	tar xvzf makestuff-libxsvf-*.tar.gz
 	rm makestuff-libxsvf-*.tar.gz
 	mkdir -p ../../libs
