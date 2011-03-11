@@ -129,6 +129,51 @@ ParseStatus gotXSTATE(TAPState tapState) {
 	return PARSE_SUCCESS;
 }
 
+ParseStatus gotXSDRE(uint16 tdiNumBits, const uint8 *tdiBitmap) {
+	unsigned short numBytes = bitsToBytes(tdiNumBits);
+	printf("XSDRE(0x%02X, 0x", tdiNumBits);
+	while ( numBytes-- ) {
+		printf("%02X", *tdiBitmap++);
+	}
+	printf(")\n");
+	return PARSE_SUCCESS;
+}
+
+// TODO: XENDIR accepts a TAPState
+//
+ParseStatus gotXENDIR(uint8 tapState) {
+	printf("XENDIR(0x%02X)\n", tapState);
+	return PARSE_SUCCESS;
+}
+
+ParseStatus gotXSDRC(uint16 tdiNumBits, const uint8 *tdiBitmap) {
+	unsigned short numBytes = bitsToBytes(tdiNumBits);
+	printf("XSDRC(0x%02X, 0x", tdiNumBits);
+	while ( numBytes-- ) {
+		printf("%02X", *tdiBitmap++);
+	}
+	printf(")\n");
+	return PARSE_SUCCESS;
+}
+
+// XENDDR accepts a TAPState
+//
+ParseStatus gotXENDDR(uint8 tapState) {
+	printf("XENDDR(0x%02X)\n", tapState);
+	return PARSE_SUCCESS;
+}
+
+ParseStatus gotXSDRB(uint16 tdiNumBits, const uint8 *tdiBitmap) {
+	unsigned short numBytes = bitsToBytes(tdiNumBits);
+	printf("XSDRB(0x%02X, 0x", tdiNumBits);
+	while ( numBytes-- ) {
+		printf("%02X", *tdiBitmap++);
+	}
+	printf(")\n");
+	return PARSE_SUCCESS;
+}
+
+
 int main(int argc, const char *argv[]) {
 	FILE *file;
 	unsigned char buffer[128];
