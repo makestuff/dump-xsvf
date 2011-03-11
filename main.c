@@ -22,21 +22,10 @@
 #include <stdio.h>
 #include "parse.h"
 
-ParseStatus gotXCOMPLETE() {
-	printf("XCOMPLETE()\n");
-	return PARSE_SUCCESS;
-}
-ParseStatus gotXSIR(unsigned char sirNumBits, const unsigned char *sirBitmap) {
-	unsigned short numBytes = bitsToBytes(sirNumBits);
-	printf("XSIR(0x%02X, 0x", sirNumBits);
-	while ( numBytes-- ) {
-		printf("%02X", *sirBitmap++);
-	}
-	printf(")\n");
-	return PARSE_SUCCESS;
-}
-ParseStatus gotXTDOMASK(unsigned short maskNumBits, const unsigned char *maskBitmap) {
-	unsigned short numBytes = bitsToBytes(maskNumBits);
+// See XAPP503 page 18
+//
+ParseStatus gotXTDOMASK(uint16 maskNumBits, const uint8 *maskBitmap) {
+	uint16 numBytes = bitsToBytes(maskNumBits);
 	printf("XTDOMASK(0x%02X, 0x", maskNumBits);
 	while ( numBytes-- ) {
 		printf("%02X", *maskBitmap++);
@@ -44,21 +33,36 @@ ParseStatus gotXTDOMASK(unsigned short maskNumBits, const unsigned char *maskBit
 	printf(")\n");
 	return PARSE_SUCCESS;
 }
-ParseStatus gotXRUNTEST(unsigned long runTest) {
-	printf("XRUNTEST(0x%08X)\n", (unsigned int)runTest);
-	return PARSE_SUCCESS;
-}
-ParseStatus gotXREPEAT(unsigned char numRepeats) {
+ParseStatus gotXREPEAT(uint8 numRepeats) {
 	printf("XREPEAT(0x%02X)\n", numRepeats);
 	return PARSE_SUCCESS;
 }
-ParseStatus gotXSDRSIZE(unsigned short sdrSize) {
+
+// See XAPP503 page 19
+//
+ParseStatus gotXRUNTEST(uint32 runTest) {
+	printf("XRUNTEST(0x%08lX)\n", runTest);
+	return PARSE_SUCCESS;
+}
+ParseStatus gotXSIR(uint8 sirNumBits, const uint8 *sirBitmap) {
+	uint16 numBytes = bitsToBytes(sirNumBits);
+	printf("XSIR(0x%02X, 0x", sirNumBits);
+	while ( numBytes-- ) {
+		printf("%02X", *sirBitmap++);
+	}
+	printf(")\n");
+	return PARSE_SUCCESS;
+}
+ParseStatus gotXSDRSIZE(uint16 sdrSize) {
 	printf("XSDRSIZE(0x%04X)\n", sdrSize);
 	return PARSE_SUCCESS;
 }
-ParseStatus gotXSDRTDO(unsigned short tdoNumBits, const unsigned char *tdoBitmap, const unsigned char *tdoMask) {
-	const unsigned short numBytes = bitsToBytes(tdoNumBits);
-	unsigned short i = numBytes;
+
+// See XAPP503 page 20
+//
+ParseStatus gotXSDRTDO(uint16 tdoNumBits, const uint8 *tdoBitmap, const uint8 *tdoMask) {
+	const uint16 numBytes = bitsToBytes(tdoNumBits);
+	uint16 i = numBytes;
 	printf("XSDRTDO(0x%02X, 0x", tdoNumBits);
 	while ( i-- ) {
 		printf("%02X", *tdoBitmap++);
@@ -69,6 +73,40 @@ ParseStatus gotXSDRTDO(unsigned short tdoNumBits, const unsigned char *tdoBitmap
 		printf("%02X", *tdoBitmap++);
 	}
 	printf(")\n");
+	return PARSE_SUCCESS;
+}
+ParseStatus gotXSDRB(uint16 tdiNumBits, const uint8 *tdiBitmap) {
+	uint16 numBytes = bitsToBytes(tdiNumBits);
+	printf("XSDRB(0x%02X, 0x", tdiNumBits);
+	while ( numBytes-- ) {
+		printf("%02X", *tdiBitmap++);
+	}
+	printf(")\n");
+	return PARSE_SUCCESS;
+}
+ParseStatus gotXSDRC(uint16 tdiNumBits, const uint8 *tdiBitmap) {
+	uint16 numBytes = bitsToBytes(tdiNumBits);
+	printf("XSDRC(0x%02X, 0x", tdiNumBits);
+	while ( numBytes-- ) {
+		printf("%02X", *tdiBitmap++);
+	}
+	printf(")\n");
+	return PARSE_SUCCESS;
+}
+ParseStatus gotXSDRE(uint16 tdiNumBits, const uint8 *tdiBitmap) {
+	uint16 numBytes = bitsToBytes(tdiNumBits);
+	printf("XSDRE(0x%02X, 0x", tdiNumBits);
+	while ( numBytes-- ) {
+		printf("%02X", *tdiBitmap++);
+	}
+	printf(")\n");
+	return PARSE_SUCCESS;
+}
+
+// See XAPP503 page 22
+//
+ParseStatus gotXCOMPLETE() {
+	printf("XCOMPLETE()\n");
 	return PARSE_SUCCESS;
 }
 ParseStatus gotXSTATE(TAPState tapState) {
@@ -128,55 +166,22 @@ ParseStatus gotXSTATE(TAPState tapState) {
 	printf(")\n");
 	return PARSE_SUCCESS;
 }
-
-ParseStatus gotXSDRE(uint16 tdiNumBits, const uint8 *tdiBitmap) {
-	unsigned short numBytes = bitsToBytes(tdiNumBits);
-	printf("XSDRE(0x%02X, 0x", tdiNumBits);
-	while ( numBytes-- ) {
-		printf("%02X", *tdiBitmap++);
-	}
-	printf(")\n");
-	return PARSE_SUCCESS;
-}
-
-// TODO: XENDIR accepts a TAPState
-//
-ParseStatus gotXENDIR(uint8 tapState) {
+ParseStatus gotXENDIR(uint8 tapState) {    // TODO: XENDIR accepts a TAPState
 	printf("XENDIR(0x%02X)\n", tapState);
 	return PARSE_SUCCESS;
 }
 
-ParseStatus gotXSDRC(uint16 tdiNumBits, const uint8 *tdiBitmap) {
-	unsigned short numBytes = bitsToBytes(tdiNumBits);
-	printf("XSDRC(0x%02X, 0x", tdiNumBits);
-	while ( numBytes-- ) {
-		printf("%02X", *tdiBitmap++);
-	}
-	printf(")\n");
-	return PARSE_SUCCESS;
-}
 
-// XENDDR accepts a TAPState
+// See XAPP503 page 23
 //
-ParseStatus gotXENDDR(uint8 tapState) {
+ParseStatus gotXENDDR(uint8 tapState) {    // TODO: XENDDR accepts a TAPState
 	printf("XENDDR(0x%02X)\n", tapState);
 	return PARSE_SUCCESS;
 }
 
-ParseStatus gotXSDRB(uint16 tdiNumBits, const uint8 *tdiBitmap) {
-	unsigned short numBytes = bitsToBytes(tdiNumBits);
-	printf("XSDRB(0x%02X, 0x", tdiNumBits);
-	while ( numBytes-- ) {
-		printf("%02X", *tdiBitmap++);
-	}
-	printf(")\n");
-	return PARSE_SUCCESS;
-}
-
-
 int main(int argc, const char *argv[]) {
 	FILE *file;
-	unsigned char buffer[128];
+	uint8 buffer[128];
 	size_t size;
 	ParseStatus status;
 
