@@ -22,6 +22,45 @@
 #include <stdio.h>
 #include "parse.h"
 
+const char *getStateName(TAPState tapState) {
+	switch ( tapState ) {
+		case TAPSTATE_TEST_LOGIC_RESET:
+			return "TEST_LOGIC_RESET";
+		case TAPSTATE_RUN_TEST_IDLE:
+			return "RUN_TEST_IDLE";
+		case TAPSTATE_SELECT_DR:
+			return "SELECT_DR";
+		case TAPSTATE_CAPTURE_DR:
+			return "CAPTURE_DR";
+		case TAPSTATE_SHIFT_DR:
+			return "SHIFT_DR";
+		case TAPSTATE_EXIT1_DR:
+			return "EXIT1_DR";
+		case TAPSTATE_PAUSE_DR:
+			return "PAUSE_DR";
+		case TAPSTATE_EXIT2_DR:
+			return "EXIT2_DR";
+		case TAPSTATE_UPDATE_DR:
+			return "UPDATE_DR";
+		case TAPSTATE_SELECT_IR:
+			return "SELECT_IR";
+		case TAPSTATE_CAPTURE_IR:
+			return "CAPTURE_IR";
+		case TAPSTATE_SHIFT_IR:
+			return "SHIFT_IR";
+		case TAPSTATE_EXIT1_IR:
+			return "EXIT1_IR";
+		case TAPSTATE_PAUSE_IR:
+			return "PAUSE_IR";
+		case TAPSTATE_EXIT2_IR:
+			return "EXIT2_IR";
+		case TAPSTATE_UPDATE_IR:
+			return "UPDATE_IR";
+		default:
+			return "ILLEGAL";
+	}
+}
+
 // See XAPP503 page 18
 //
 ParseStatus gotXTDOMASK(uint16 maskNumBits, const uint8 *maskBitmap) {
@@ -110,72 +149,18 @@ ParseStatus gotXCOMPLETE() {
 	return PARSE_SUCCESS;
 }
 ParseStatus gotXSTATE(TAPState tapState) {
-	printf("XSTATE(");
-	switch ( tapState ) {
-		case TAPSTATE_TEST_LOGIC_RESET:
-			printf("TEST_LOGIC_RESET");
-			break;
-		case TAPSTATE_RUN_TEST_IDLE:
-			printf("RUN_TEST_IDLE");
-			break;
-		case TAPSTATE_SELECT_DR:
-			printf("SELECT_DR");
-			break;
-		case TAPSTATE_CAPTURE_DR:
-			printf("CAPTURE_DR");
-			break;
-		case TAPSTATE_SHIFT_DR:
-			printf("SHIFT_DR");
-			break;
-		case TAPSTATE_EXIT1_DR:
-			printf("EXIT1_DR");
-			break;
-		case TAPSTATE_PAUSE_DR:
-			printf("PAUSE_DR");
-			break;
-		case TAPSTATE_EXIT2_DR:
-			printf("EXIT2_DR");
-			break;
-		case TAPSTATE_UPDATE_DR:
-			printf("UPDATE_DR");
-			break;
-		case TAPSTATE_SELECT_IR:
-			printf("SELECT_IR");
-			break;
-		case TAPSTATE_CAPTURE_IR:
-			printf("CAPTURE_IR");
-			break;
-		case TAPSTATE_SHIFT_IR:
-			printf("SHIFT_IR");
-			break;
-		case TAPSTATE_EXIT1_IR:
-			printf("EXIT1_IR");
-			break;
-		case TAPSTATE_PAUSE_IR:
-			printf("PAUSE_IR");
-			break;
-		case TAPSTATE_EXIT2_IR:
-			printf("EXIT2_IR");
-			break;
-		case TAPSTATE_UPDATE_IR:
-			printf("UPDATE_IR");
-			break;
-		default:
-			printf("ILLEGAL");
-	}
-	printf(")\n");
+	printf("XSTATE(%s)\n", getStateName(tapState));
 	return PARSE_SUCCESS;
 }
-ParseStatus gotXENDIR(uint8 tapState) {    // TODO: XENDIR accepts a TAPState
-	printf("XENDIR(0x%02X)\n", tapState);
+ParseStatus gotXENDIR(uint8 endIR) {
+	printf("XENDIR(%s)\n", endIR ? "PAUSE_IR":"RUN_TEST_IDLE");
 	return PARSE_SUCCESS;
 }
-
 
 // See XAPP503 page 23
 //
-ParseStatus gotXENDDR(uint8 tapState) {    // TODO: XENDDR accepts a TAPState
-	printf("XENDDR(0x%02X)\n", tapState);
+ParseStatus gotXENDDR(uint8 endDR) {
+	printf("XENDDR(%s)\n", endDR ? "PAUSE_DR":"RUN_TEST_IDLE");
 	return PARSE_SUCCESS;
 }
 
